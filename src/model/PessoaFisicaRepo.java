@@ -33,6 +33,7 @@ public class PessoaFisicaRepo {
     public void alterar(PessoaFisica pessoaFisica) {
         if (mapaPessoas.containsKey(pessoaFisica.getId())) {
             mapaPessoas.put(pessoaFisica.getId(), pessoaFisica);
+            System.out.println("Pessoa alterada com sucesso!");
         } else {
             System.out.println("Pessoa não encontrada. Não foi possível realizar a alteração.");
         }
@@ -40,6 +41,7 @@ public class PessoaFisicaRepo {
 
     public void excluir(int id) {
         mapaPessoas.remove(id);
+        System.out.println("Pessoa excluida com sucesso!");
     }
 
     public PessoaFisica obter(int id) {
@@ -53,17 +55,17 @@ public class PessoaFisicaRepo {
 
     public void persistir(String nomeArquivo) throws IOException {
         FileOutputStream fos = new FileOutputStream(new File(nomeArquivo));
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(mapaPessoas);
-        oos.close();
+            try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                oos.writeObject(mapaPessoas);
+            }
         System.out.println("Dados de Pessoa Fisica Armazenados.");
     }
 
     public void recuperar(String nomeArquivo) throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream(new File(nomeArquivo));
-        ObjectInputStream ois = new ObjectInputStream(fis);
-        mapaPessoas = (Map<Integer, PessoaFisica>) ois.readObject();
-        ois.close();
+            try (ObjectInputStream ois = new ObjectInputStream(fis)) {
+                mapaPessoas = (Map<Integer, PessoaFisica>) ois.readObject();
+            }
         System.out.println("Dados de Pessoa Fisica Recuperados.");
     }
 
